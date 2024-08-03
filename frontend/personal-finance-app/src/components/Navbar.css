@@ -1,0 +1,24 @@
+/* src/components/Navbar.css */
+
+.navbar {
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .navbar-brand img {
+    max-height: 50px; /* Adjust height as needed */
+  }
+  
+  .nav-link {
+    font-size: 16px; /* Adjust font size as needed */
+    margin-left: 10px; /* Add spacing between links */
+  }
+  
+  .nav-link:hover {
+    color: #007bff; /* Change link color on hover */
+    text-decoration: underline; /* Optional: add underline on hover */
+  }
+  
+  .navbar-toggler-icon {
+    background-image: url('data:image/svg+xml,...'); /* Optional: customize toggle icon */
+  }
+  

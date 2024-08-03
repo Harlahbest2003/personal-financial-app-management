@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
-import { Link } from 'react-router-dom'; // Import Link for routing
-import './Dashboard.css'; // Import custom CSS for styling
+import { Link } from 'react-router-dom'; 
+import './Dashboard.css';
 
 const Dashboard = () => {
   return (
