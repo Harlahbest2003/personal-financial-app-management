@@ -1,19 +1,22 @@
-// src/components/Navbar.js
 import React from 'react';
-import { Navbar, Nav, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { Navbar, Nav, Container } from 'react-bootstrap';
 
-const NavBar = () => {
+const NavigationBar = () => {
+  const token = localStorage.getItem('token');
   return (
-    <Navbar bg="dark" variant="dark" expand="lg">
+    <Navbar bg="light" expand="lg">
       <Container>
-        <Navbar.Brand as={Link} to="/">FinanceApp</Navbar.Brand>
+        <Navbar.Brand as={Link} to="/">POS App</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto">
-            <Nav.Link as={Link} to="/register">Register</Nav.Link>
-            <Nav.Link as={Link} to="/login">Login</Nav.Link>
-            <Nav.Link as={Link} to="/dashboard">Dashboard</Nav.Link>
+          <Nav className="me-auto">
+            <Nav.Link as={Link} to="/Login">Home</Nav.Link>
+            <Nav.Link as={Link} to="/about">About</Nav.Link>
+            <Nav.Link as={Link} to="/products">Products</Nav.Link>
+            <Nav.Link as={Link} to="/contact">Contact</Nav.Link>
+            <Nav.Link as={Link} to="/payment">Payment</Nav.Link>
+            <Nav.Link as={Link} to="/post-item">Post Item</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
@@ -21,4 +24,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default NavigationBar;
