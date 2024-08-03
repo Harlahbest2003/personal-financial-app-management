@@ -1,0 +1,26 @@
+/* src/components/Dashboard/Dashboard.css */
+.feature-card {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .card-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+  
+  .card-text {
+    font-size: 1rem;
+  }
+  
+  .container {
+    padding-top: 20px;
+  }
+  
