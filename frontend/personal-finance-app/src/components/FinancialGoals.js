@@ -1,25 +1,44 @@
-// src/components/Dashboard/FinancialGoals.js
 import React, { useState } from 'react';
-import { Form, Button, Container, ListGroup } from 'react-bootstrap';
-
-const FinancialGoals = () => {
-  const [goal, setGoal] = useState({ name: '', targetAmount: '', currentAmount: '' });
-  const [goals, setGoals] = useState([]);
+import { Form, Button, Container } from 'react-bootstrap';
+// import axios from '../api/axios'; // Adjust the path as needed
+import axios from 'axios';
+const AddGoal = () => {
+  const [goal, setGoal] = useState({ name: '', targetAmount: '', targetDate: '' });
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const handleChange = (e) => {
     setGoal({ ...goal, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setGoals([...goals, goal]);
-    setGoal({ name: '', targetAmount: '', currentAmount: '' });
+    if (!goal.name || !goal.targetAmount || !goal.targetDate) {
+      setError('Please fill out all fields.');
+      return;
+    }
+    if (goal.targetAmount <= 0) {
+      setError('Target amount must be a positive number.');
+      return;
+    }
+    try {
+      const response = await axios.post('http://localhost:5000/api/goals', goal);
+      setSuccess('Goal added successfully!');
+      console.log('Goal response:', response.data);
+      // Reset form
+      setGoal({ name: '', targetAmount: '', targetDate: '' });
+    } catch (err) {
+      setError('Failed to add goal. Please try again.');
+      console.error('Goal error:', err.response ? err.response.data : err);
+    }
   };
 
   return (
     <Container>
-      <h2 className="my-4">Financial Goals</h2>
+      <h2 className="my-4">Add Financial Goal</h2>
       <Form onSubmit={handleSubmit}>
+        {error && <div className="text-danger">{error}</div>}
+        {success && <div className="text-success">{success}</div>}
         <Form.Group controlId="formName">
           <Form.Label>Goal Name</Form.Label>
           <Form.Control 
@@ -42,31 +61,22 @@ const FinancialGoals = () => {
           />
         </Form.Group>
 
-        <Form.Group controlId="formCurrentAmount">
-          <Form.Label>Current Amount</Form.Label>
+        <Form.Group controlId="formTargetDate">
+          <Form.Label>Target Date</Form.Label>
           <Form.Control 
-            type="number" 
-            name="currentAmount" 
-            value={goal.currentAmount} 
+            type="date" 
+            name="targetDate" 
+            value={goal.targetDate} 
             onChange={handleChange} 
-            placeholder="Enter current amount" 
           />
         </Form.Group>
 
-        <Button variant="primary" type="submit">
+        <Button variant="primary" type="submit" className="mt-3">
           Add Goal
         </Button>
       </Form>
-
-      <ListGroup className="mt-4">
-        {goals.map((g, index) => (
-          <ListGroup.Item key={index}>
-            {g.name}: ${g.currentAmount} / ${g.targetAmount}
-          </ListGroup.Item>
-        ))}
-      </ListGroup>
     </Container>
   );
 };
 
-export default FinancialGoals;
+export default AddGoal;

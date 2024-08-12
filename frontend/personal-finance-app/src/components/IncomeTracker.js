@@ -1,19 +1,39 @@
-// src/components/Dashboard/IncomeTracker.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, Container, ListGroup } from 'react-bootstrap';
+// import axios from '../api/axios'; // Adjust the path to where your axios instance is located
+import axios from 'axios';
 
 const IncomeTracker = () => {
   const [income, setIncome] = useState({ source: '', amount: '' });
   const [incomes, setIncomes] = useState([]);
 
+  // Fetch incomes from the backend when the component mounts
+  useEffect(() => {
+    const fetchIncomes = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/income');
+        setIncomes(response.data);
+      } catch (error) {
+        console.error('Error fetching incomes:', error);
+      }
+    };
+
+    fetchIncomes();
+  }, []);
+
   const handleChange = (e) => {
     setIncome({ ...income, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setIncomes([...incomes, income]);
-    setIncome({ source: '', amount: '' });
+    try {
+      const response = await axios.post('http://localhost:5000/api/income', income);
+      setIncomes([...incomes, response.data]);
+      setIncome({ source: '', amount: '' });
+    } catch (error) {
+      console.error('Error adding income:', error);
+    }
   };
 
   return (
@@ -42,14 +62,14 @@ const IncomeTracker = () => {
           />
         </Form.Group>
 
-        <Button variant="primary" type="submit">
+        <Button className='m-2' variant="primary" type="submit">
           Add Income
         </Button>
       </Form>
 
       <ListGroup className="mt-4">
-        {incomes.map((inc, index) => (
-          <ListGroup.Item key={index}>
+        {incomes.map((inc) => (
+          <ListGroup.Item key={inc._id}>
             {inc.source}: ${inc.amount}
           </ListGroup.Item>
         ))}

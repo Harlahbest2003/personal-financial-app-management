@@ -1,36 +1,34 @@
 // controllers/expensesController.js
-const Expense = require('../models/Expense');
+const Expense = require('../models/Expense'); // Adjust the path as necessary
 
-// Add an expense
-exports.addExpense = async (req, res) => {
+const addExpense = async (req, res) => {
   try {
-    const { user, amount, category, date, description } = req.body;
-
-    const expense = new Expense({ user, amount, category, date, description });
+    const expense = new Expense(req.body);
     await expense.save();
-
     res.status(201).json(expense);
-  } catch (err) {
-    res.status(500).json({ msg: 'Server error' });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 };
 
-// Get all expenses for a user
-exports.getExpenses = async (req, res) => {
+const getExpenses = async (req, res) => {
   try {
-    const expenses = await Expense.find({ user: req.params.userId });
+    const { userId } = req.params;
+    const expenses = await Expense.find({ userId });
     res.json(expenses);
-  } catch (err) {
-    res.status(500).json({ msg: 'Server error' });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 };
 
-// Delete an expense
-exports.deleteExpense = async (req, res) => {
+const deleteExpense = async (req, res) => {
   try {
-    await Expense.findByIdAndDelete(req.params.id);
-    res.json({ msg: 'Expense deleted' });
-  } catch (err) {
-    res.status(500).json({ msg: 'Server error' });
+    const { id } = req.params;
+    await Expense.findByIdAndDelete(id);
+    res.status(204).send();
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 };
+
+module.exports = { addExpense, getExpenses, deleteExpense };

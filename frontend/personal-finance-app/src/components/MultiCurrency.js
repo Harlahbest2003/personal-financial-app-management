@@ -1,16 +1,22 @@
-// src/components/Dashboard/MultiCurrency.js
 import React, { useState } from 'react';
 import { Form, Button, Container } from 'react-bootstrap';
-
+// import axios from '../api/axios'; // Adjust the path as needed
+import axios from 'axios';
 const MultiCurrency = () => {
   const [amount, setAmount] = useState('');
   const [currency, setCurrency] = useState('USD');
   const [convertedAmount, setConvertedAmount] = useState(null);
+  const [error, setError] = useState('');
 
-  const handleConvert = () => {
-    // Dummy conversion logic, replace with real API
-    const conversionRate = 0.85; // Example rate for USD to EUR
-    setConvertedAmount(amount * conversionRate);
+  const handleConvert = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/currency', { amount, currency });
+      setConvertedAmount(response.data.convertedAmount);
+      setError('');
+    } catch (err) {
+      setError('Failed to convert currency.');
+      console.error('Currency conversion error:', err);
+    }
   };
 
   return (
@@ -44,6 +50,8 @@ const MultiCurrency = () => {
           Convert
         </Button>
 
+        {error && <div className="text-danger mt-3">{error}</div>}
+        
         {convertedAmount !== null && (
           <div className="mt-3">
             <h4>Converted Amount:</h4>

@@ -1,27 +1,48 @@
 import React, { useState } from 'react';
-import { Form, Button, Container } from 'react-bootstrap';
+import { Form, Button, Container, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import axios from '../api/axios'; // Import the Axios instance
 import './Register.css'; // Ensure this path is correct
 
 const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert('Passwords do not match');
+      setError('Passwords do not match');
       return;
     }
-    // Add your registration logic here
-    console.log('Registering with:', { email, password });
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return;
+    }
+    setError('');
+    
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/register', { email, password });
+      setSuccess('Registration successful!');
+      console.log('Registration response:', response.data);
+      // Reset form
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+    } catch (err) {
+      setError('Registration failed. Please try again.');
+      console.error('Registration error:', err.response ? err.response.data : err);
+    }
   };
 
   return (
     <Container className="register-container">
       <h2 className="text-center mb-4">Register</h2>
       <Form onSubmit={handleSubmit}>
+        {error && <Alert variant="danger">{error}</Alert>}
+        {success && <Alert variant="success">{success}</Alert>}
         <Form.Group controlId="formEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control

@@ -2,6 +2,7 @@
 
 .navbar {
     border-bottom: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
   .navbar-brand img {
@@ -14,11 +15,46 @@
   }
   
   .nav-link:hover {
-    color: #007bff; /* Change link color on hover */
+    color: #007bff; 
+    color: #ffff;
     text-decoration: underline; /* Optional: add underline on hover */
   }
   
   .navbar-toggler-icon {
     background-image: url('data:image/svg+xml,...'); /* Optional: customize toggle icon */
+  }
+  /* src/components/Navbar.css */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+ 
+  .navbar-nav .nav-link {
+    margin-right: 10px;
+  }
+  App {
+    text-align: center;
+  }
+  
+  .App-logo {
+    height: 40vmin;
+    pointer-events: none;
+  }
+  
+  @media (prefers-reduced-motion: no-preference) {
+    .App-logo {
+      animation: App-logo-spin infinite 20s linear;
+    }
+  }
+  
+  
+  
+  @keyframes App-logo-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
   

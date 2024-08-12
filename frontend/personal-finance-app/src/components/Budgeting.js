@@ -1,19 +1,37 @@
-// src/components/Dashboard/Budgeting.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, Container, ListGroup } from 'react-bootstrap';
-
+// import axios from '../api/axios'; // Adjust path if necessary
+import axios from 'axios';
 const Budgeting = () => {
   const [budget, setBudget] = useState({ category: '', amount: '' });
   const [budgets, setBudgets] = useState([]);
+
+  useEffect(() => {
+    const fetchBudgets = async () => {
+      try {
+        const response = await axios.get('/budgets');
+        setBudgets(response.data);
+      } catch (error) {
+        console.error('Error fetching budgets:', error);
+      }
+    };
+
+    fetchBudgets();
+  }, []);
 
   const handleChange = (e) => {
     setBudget({ ...budget, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setBudgets([...budgets, budget]);
-    setBudget({ category: '', amount: '' });
+    try {
+      const response = await axios.post('http://localhost:5000/api/budgets', budget);
+      setBudgets([...budgets, response.data]);
+      setBudget({ category: '', amount: '' });
+    } catch (error) {
+      console.error('Error adding budget:', error);
+    }
   };
 
   return (
@@ -42,14 +60,14 @@ const Budgeting = () => {
           />
         </Form.Group>
 
-        <Button variant="primary" type="submit">
+        <Button className='m-2' variant="primary" type="submit">
           Set Budget
         </Button>
       </Form>
 
       <ListGroup className="mt-4">
-        {budgets.map((bud, index) => (
-          <ListGroup.Item key={index}>
+        {budgets.map((bud) => (
+          <ListGroup.Item key={bud._id}>
             {bud.category}: ${bud.amount}
           </ListGroup.Item>
         ))}
